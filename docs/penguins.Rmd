@@ -1,0 +1,81 @@
+---
+title: "Masse des manchots d'Antarctique"
+author: "___"
+date: "__/__/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+SciViews::R
+```
+
+# Introduction
+
+Trois espèces de manchots ont été étudié en Antarctique entre 2007 et 2009 par le Docteur Kristen Gorman de la base antarctique Palmer. Les manchots ont été étudié sur l'île du Rêve (`Dream`), sur l'île de Torgersen (`Torgersen`) et sur île Biscoe (`Biscoe`). Les espèces étudiées sont le manchot Papou *Pygoscelis papua* (Forster, 1781), `Gentoo`, le manchot Adélie *Pygoscelis adlidae* (Hombron & Jacquinot, 1841), `Adelie` et les manchots à jugulaire *Pygoscelis antarcticus* (Forster, 1781), `Chinstrap`.
+
+![Couple de manchots adélies avec son petit à droite et un manchot à jugulaire (gentoo) à gauche. Photo de J. Auch, license creative commons 2.0 generic.](../images/adelie_and_gentoo.jpg)
+
+Les chercheurs souhaitent mettre en évident la différence de masse entre les 3 espèces de manchots et tenant compte du sexe des individus
+
+# Analyse
+
+```{r, echo=TRUE}
+penguins <- read("penguins", package = "palmerpenguins")
+skimr::skim(penguins)
+```
+
+<!--- Consignes
+Décrivez en 2 à 3 phrases le tableau de données sur base des informations proposée par la fonction skim(). Intéressez vous à la présence de valeurs manquantes, de l'unité de chaque variable,...
+--->
+
+
+<!--- Consignes
+Réalisez un tableau pertinent permettant de comparer la moyenne, l'écart-type et le nombre d'observations pour chaque espèce et chaque sexe. . Décrivez ensuite ce graphique en maximum 3 phrases
+--->
+
+```{r peng_tab}
+
+```
+
+<!---
+Réalisez un graphique pertinent permetant de comparer les trois espèces et le sexe. Décrivez ensuite ce graphique en maximum 3 phrases.
+--->
+
+```{r peng_graph}
+
+```
+
+<!---
+Réalisez une anova à 2 facteurs. Déterminez si vous devez employer un modèle complet croisé ou un modèle croisé sans intéractions. Décrivez votre modèle en 3 à 5 phrases.
+--->
+
+```{r peng_anova}
+
+```
+
+<!--- Consignes
+Vérifiez grâce au test de Bartlett l'homoscédasticité. Décrivez votre résulats en 2 phrases.
+--->
+
+```{r peng_bartlett}
+
+```
+
+<!--- Consignes
+Vérifiez la distribution homogène de vos résidus. Décrivez votre résulats en maximum 2 phrases.
+--->
+
+```{r peng_resid}
+
+```
+
+<!--- Consignes
+Réalisez une test de comparaison multiple si cela se justifie. Décrivez votre résutlats en 4 phrases maximum.
+--->
+
+```{r peng_multcomp}
+
+```
+
+
