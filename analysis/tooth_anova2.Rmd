@@ -1,0 +1,117 @@
+---
+title: "Untitled"
+author: '...'
+date: "3/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# packages
+SciViews::R()
+```
+
+# Objectif
+
+Ce document s'intéresse à la réalisation d'une ANOVA à deux facteurs
+
+# Situation
+
+Les scientifiques ont étudié la croissance des dents de cochons d'Inde. Ils ont pour cela étudié 60 individus.
+
+Les variables étudiées sont les suivantes :
+
+- len : longueur des dents (longueur en mm)
+- supp : supplémentation administrée (jus d'orange ou vitamine C)
+- dose : dose des suppléments administrés (mg/j)
+
+Si vous souhaitez d'avantages d'informations, vous pouvez consulter la page d'aide suivante.
+
+```{r, eval FALSE}
+?ToothGrowth
+```
+
+# Analyse
+
+> Importez le jeu de données ToothGrowth du package `datasets` Complétez la fonction read ci-dessous
+
+```{r importation}
+tg <- read("...", package = "...")
+```
+
+> Utilisez la fonction skim() du package de `skimr` afin de prendre connaissance du tableau de données. Cette première étape vous permet de vérifier si vous avez des valeurs manquantes, des variables mal encodées,... Commentez en maximum 2 phrases le résultat de cette première fonction.
+
+```{r skim}
+
+```
+
+> Suite à votre analyse des variables, réencodez les variables mal encodé. Utilisez le fonction mutate().
+
+```{r mutate}
+# Instruction présente dans les snippets
+# 
+```
+
+> Réalisez un tableau qui résument la variabale `len` en fonction du `supp` et de `dose`. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r tab}
+# Instruction présente dans les snippets
+# 
+```
+
+> Visualisez la variabale `len` en fonction du `supp` et de `dose` avec le graphique le plus approprié. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r chart}
+# Instruction présente dans les snippets
+# 
+```
+
+> Visualisez les interactions entre vos deux variables facteurs à l'aide du graphique des interactions. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r chartinter}
+DF %>.%
+  group_by(., XFACTOR1, XFACTOR2) %>.%
+  summarise(., me = mean(YVAR)) %>.%
+  chart(data = ., me ~ XFACTOR1 %col=% XFACTOR2 %group=% XFACTOR2) +
+  geom_line() +
+  geom_point()
+```
+
+> Avant de réaliser un modèle croisé complet, réalisez un test de Bartlett. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r bartlett}
+# Instruction présente dans les snippets
+# 
+```
+
+> Réalisez et décrivez votre modèle croisé complet. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r lm}
+# Instruction présente dans les snippets
+# 
+```
+
+> Vérifiez la distribution normale des résidus. Utilisez les snippets pour vous aider. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r qqplot}
+# Instruction présente dans les snippets
+
+```
+
+> Réalisez un test de comparaison multiple. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+```{r multicomp}
+# Utilisez ces instructions
+# Attention, elles sont différentes de l'instruction pour les snippets
+glht <- multcomp::glht
+summary(anovaComp. <-  glht(
+  anova., linfct = emmeans::emm(pairwise ~ XFACTOR1 * XFACTOR2)))
+.oma <- par(oma = c(0, 5.1, 0, 0)); plot(anovaComp.); par(.oma); rm(.oma)
+```
+
+> Terminez par une conclusion générale de cette analyse. Commentez en maximum 2 phrases le résultat de cette fonction.
+
+
+
+
+
