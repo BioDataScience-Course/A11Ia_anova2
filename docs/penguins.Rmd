@@ -31,7 +31,7 @@ Décrivez en 2 à 3 phrases le tableau de données sur base des informations pro
 
 
 <!--- Consignes
-Réalisez un tableau pertinent permettant de comparer la moyenne, l'écart-type et le nombre d'observations pour chaque espèce et chaque sexe. . Décrivez ensuite ce graphique en maximum 3 phrases
+Réalisez un tableau pertinent permettant de comparer la moyenne, l'écart-type des masses et le nombre d'observations pour chaque espèce et chaque sexe. Décrivez ensuite ce tableau en maximum 3 phrases
 --->
 
 ```{r peng_tab}
