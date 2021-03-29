@@ -74,7 +74,7 @@ summary(anovaComp. <- confint(multcomp::glht(split_plot,
 ```
 
 <!--- Consignes
-Vérifiez l'homoscédasticité avec un graphique quantile-quantile et décrivez le résultat.
+Vérifiez la répartition des résidus avec un graphique des résidus par rapport aux valeurs ajustées et décrivez le résultat.
 --->
 
 ```{r}
