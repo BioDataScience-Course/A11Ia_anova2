@@ -63,7 +63,7 @@ Vérifiez grâce au test de Bartlett l'homoscédasticité. Décrivez votre résu
 ```
 
 <!--- Consignes
-Vérifiez la distribution homogène de vos résidus. Décrivez votre résulats en maximum 2 phrases.
+Vérifiez la distribution normale de vos résidus. Décrivez votre résulats en maximum 2 phrases.
 --->
 
 ```{r peng_resid}
