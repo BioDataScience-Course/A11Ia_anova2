@@ -71,6 +71,31 @@ Vérifiez la distribution normale de vos résidus. Décrivez votre résulats en 
 ```
 
 <!--- Consignes
+Le test de comparaison multiple ne peut pas être employé lorsqu'il y a des intéractions. Une solution est de créér une nouvelle variable qui groupe les deux variables facteurs. 
+Groupez les deux variables facteurs et réaliser une anova à 1 facteur. Décrivez votre résutlats en 4 phrases maximum.
+--->
+
+```{r peng_anova1}
+
+```
+
+<!--- Consignes
+Vérifiez l'homoscédasticité lié à l'anova à 1 facteurs. Décrivez votre résutlats en 2 phrases maximum.
+--->
+
+```{r peng_bartlett1}
+
+```
+
+<!--- Consignes
+Vérifiez la distribution normale des résidus de l'anova à 1 facteurs. Décrivez votre résutlats en 2 phrases maximum.
+--->
+
+```{r peng_resid1}
+
+```
+
+<!--- Consignes
 Réalisez une test de comparaison multiple si cela se justifie. Décrivez votre résutlats en 4 phrases maximum.
 --->
 
