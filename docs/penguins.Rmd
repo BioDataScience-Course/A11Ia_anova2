@@ -1,7 +1,7 @@
 ---
-title: "Masse des manchots d'Antarctique"
+title: "Manchots antarctiques"
 author: "___"
-date: "__/__/2021"
+date: "___"
 output: html_document
 ---
 
@@ -12,95 +12,72 @@ SciViews::R
 
 # Introduction
 
-Trois espèces de manchots ont été étudié en Antarctique entre 2007 et 2009 par le Docteur Kristen Gorman de la base antarctique Palmer. Les manchots ont été étudié sur l'île du Rêve (`Dream`), sur l'île de Torgersen (`Torgersen`) et sur île Biscoe (`Biscoe`). Les espèces étudiées sont le manchot Papou *Pygoscelis papua* (Forster, 1781), `Gentoo`, le manchot Adélie *Pygoscelis adlidae* (Hombron & Jacquinot, 1841), `Adelie` et les manchots à jugulaire *Pygoscelis antarcticus* (Forster, 1781), `Chinstrap`.
+Trois espèces de manchots ont été étudiée en Antarctique entre 2007 et 2009 par le Docteur Kristen Gorman de la base scientifique Palmer. Les manchots ont été étudié sur l'île du Rêve (`Dream`), sur l'île de Torgersen (`Torgersen`) et sur l'île Biscoe (`Biscoe`). Les espèces étudiées sont le manchot Papou *Pygoscelis papua* (Forster, 1781), `Gentoo`, le manchot Adélie *Pygoscelis adlidae* (Hombron & Jacquinot, 1841), `Adelie` et le manchot à jugulaire *Pygoscelis antarcticus* (Forster, 1781), `Chinstrap`.
 
-![Couple de manchots adélies avec son petit à droite et un manchot à jugulaire (gentoo) à gauche. Photo de J. Auch, license creative commons 2.0 generic.](../images/adelie_and_gentoo.jpg)
+![Couple de manchots adélies avec leur petit à droite et manchot à jugulaire (gentoo) à gauche. Photo de J. Auch, license creative commons 2.0 generic.](../figures/adelie_and_gentoo.jpg)
 
-Les chercheurs souhaitent mettre en évident la différence de masse entre les 3 espèces de manchots et tenant compte du sexe des individus
+Les chercheurs souhaitent mettre en évidence la différence de masse entre les trois espèces de manchots et tenant compte du sexe des individus.
 
 # Analyse
 
-```{r, echo=TRUE}
+```{r peng_skim, echo=TRUE}
 penguins <- read("penguins", package = "palmerpenguins")
 skimr::skim(penguins)
 ```
 
-<!--- Consignes
-Décrivez en 2 à 3 phrases le tableau de données sur base des informations proposée par la fonction skim(). Intéressez vous à la présence de valeurs manquantes, de l'unité de chaque variable,...
---->
+<!--% Décrivez en 2 à 3 phrases le tableau de données. Intéressez-vous aux valeurs manquantes, aux unités des variables,... -->
 
 
-<!--- Consignes
-Réalisez un tableau pertinent permettant de comparer la moyenne, l'écart-type des masses et le nombre d'observations pour chaque espèce et chaque sexe. Décrivez ensuite ce tableau en maximum 3 phrases
---->
+<!--% Réalisez ensuite un tableau permettant de comparer la moyenne, l'écart-type des masses et le nombre d'observations pour chaque espèce et chaque sexe. Interprétez ensuite ce tableau en maximum 3 phrases en dessous de lui. -->
 
 ```{r peng_tab}
 
 ```
 
-<!---
-Réalisez un graphique pertinent permetant de comparer les trois espèces et le sexe. Décrivez ensuite ce graphique en maximum 3 phrases.
---->
+<!--% Réalisez un graphique permettant de visualiser la comparaison entre les trois espèces et le sexe. Commentez ensuite ce graphique en maximum 3 phrases en dessous. -->
 
-```{r peng_graph}
+```{r peng_plot}
 
 ```
 
-<!---
-Réalisez une anova à 2 facteurs. Déterminez si vous devez employer un modèle complet croisé ou un modèle croisé sans intéractions. Décrivez votre modèle en 3 à 5 phrases.
---->
+<!--% Effectuez une ANOVA à deux facteurs. Déterminez si vous devez employer un modèle complet ou un modèle sans interactions. Décrivez et interprétez votre modèle en 3 phrases maximum en dessous. -->
 
 ```{r peng_anova}
 
 ```
 
-<!--- Consignes
-Vérifiez grâce au test de Bartlett l'homoscédasticité. Décrivez votre résulats en 2 phrases.
---->
+<!--% Vérifiez l'homoscédasticité grâce à un test de Bartlett. Interprétez votre résultats en 2 phrases en dessous. -->
 
 ```{r peng_bartlett}
 
 ```
 
-<!--- Consignes
-Vérifiez la distribution normale de vos résidus. Décrivez votre résulats en maximum 2 phrases.
---->
+<!--% Vérifiez la distribution Normale des résidus de votre modèle. Interprétez votre analyse en maximum 2 phrases en dessous. -->
 
 ```{r peng_resid}
 
 ```
 
-<!--- Consignes
-Le test de comparaison multiple ne peut pas être employé lorsqu'il y a des intéractions. Une solution est de créér une nouvelle variable qui groupe les deux variables facteurs. 
-Groupez les deux variables facteurs et réaliser une anova à 1 facteur. Décrivez votre résutlats en 4 phrases maximum.
---->
+<!--% Le test de comparaison multiple ne peut pas être employé lorsqu'il y a des interactions. Une solution est de créer une nouvelle variable qui groupe les deux variables facteurs en une seule. Faites-le et réalisez une ANOVA à un facteur ensuite. Interprétez ce que vous obtenez en 4 phrases maximum en dessous. -->
 
 ```{r peng_anova1}
 
 ```
 
-<!--- Consignes
-Vérifiez l'homoscédasticité lié à l'anova à 1 facteurs. Décrivez votre résutlats en 2 phrases maximum.
---->
+<!--% Vérifiez l'homoscédasticité des résidus de votre ANOVA à un facteur. Interprétez votre test en 2 phrases maximum en dessous. -->
 
 ```{r peng_bartlett1}
 
 ```
 
-<!--- Consignes
-Vérifiez la distribution normale des résidus de l'anova à 1 facteurs. Décrivez votre résutlats en 2 phrases maximum.
---->
+<!--% Vérifiez la distribution Normale des résidus de votre ANOVA à un facteurs. Sur cette base, indiquez si le modèle est utilisable et expliquez en 2 phrases maximum en dessous. -->
 
 ```{r peng_resid1}
 
 ```
 
-<!--- Consignes
-Réalisez une test de comparaison multiple si cela se justifie. Décrivez votre résutlats en 4 phrases maximum.
---->
+<!--% Réalisez un test de comparaison multiple si cela se justifie. Interprétez vos résultats en 4 phrases maximum en dessous. -->
 
 ```{r peng_multcomp}
 
 ```
-
-

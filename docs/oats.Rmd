@@ -1,81 +1,68 @@
 ---
 title: "___"
-author: '...'
-date: "3/5/2020"
+author: '___'
+date: "___"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 # Introduction
 
-Ce document s'intéresse à la réalisation d'un modèle dit en parcelles divisées (split-plot en anglais). Il porte sur le rendement de culture d'avoine.
- 
-```{r}
+Vous êtes chargé d'analyser les résultats d'une expérience organisée en parcelles divisées (split-plot en anglais). Votre travail porte sur le rendement de cultures d'avoine en fonction de l'apport plus ou moins important en engrais azoté (variable `nitrogen`). Vos cultures sont organisées en parcelles qui sont indiquées dans la variable `blocks`. Vous travaillerez uniquement sur la variété `"Golden.rain"`.
+
+<!--# Le code ci-dessous importe et remanie le tableau de données à utiliser pour vous. -->
+
+```{r import}
 oats <- read("oats", package = "MASS") %>.%
-  filter(., `V` == "Golden.rain") %>.%
+  filter(., V == "Golden.rain") %>.%
   transmute(., 
-            blocks = `B`,
-            varieties = droplevels(`V`),
-            nitrogen = as.factor(
-              round(0.1257 * (as.numeric(
-                stringr::str_remove_all(
-                  as.character(`N`), "cwt"))),
-                2)), 
-            yield = 0.063*`Y`)
+    blocks    = B,
+    varieties = droplevels(V),
+    nitrogen  = as.factor(round(0.1257 + (as.numeric(
+      stringr::str_remove_all(as.character(N), "cwt"))), 2)), 
+    yield     = 0.063 * Y) 
 ```
 
-Des agronomes ont étudiés le rendement de culture d'avoine avec 4 concentrations en Azote sur 6 parcelles (block) subdivisée en 4 sous-parcelles. 
+Vous avez donc les variables\ :
 
-Le tableau initiale provient de package MASS. Ce dernier est modifiée : 
-
-- parcelles (blocks) comprend 6 parcelles subdivisées en 4 sous-parcelles.
-- ajout d'azote (nitrogen) est exprimé en tonnes par hectare
-- rendement (yield) exprimé en tonnes par hectare
-
-*On ne s'intéresse que la variété `Golden rain`.*
+- `blocks`, six parcelles subdivisées en quatre sous-parcelles.
+- `varieties`, la variété d'avoine.
+- `nitrogen`, quantité d'azote ajouté sous forme d'engrais en tonnes par hectare, transformée en variable facteur (quatre niveaux).
+- `yield`, rendement de l'avoine en tonnes par hectare.
 
 # Analyse
 
-<!--- Consignes
-Réalisez un premier graphique en nuage de points pour visualiser la variation de rendement en fonction des parcelles et de l'ajout d'azote. Commentez en maximum 2 phrases le résultat de cette première fonction.
---->
+<!--% Réalisez un premier graphique en nuage de points pour visualiser la variation de rendement en fonction des parcelles et de l'ajout d'azote. Commentez en maximum 2 phrases en dessous (ce graphique est-il le plus adapté ? Pourquoi ?). -->
 
 ```{r oats_plot}
 
 ```
 
-<!--- Consinges
-Modofoiez l'instructions suivante afin de réaliser un modèle split-plot. Déterminez judicieusement XFACTOR1 et XFACTOR2. Commentez en maximum 2 phrases le résultat de cette première fonction.
---->
+<!--% Complétez l'instruction suivante pour créer un modèle split-plot. Déterminez judicieusement XFACTOR1 et XFACTOR2. Interprétez en maximum 2 phrases le résultat obtenu. -->
 
-```{r}
+```{r aots_anova}
 split_plot <- lmerTest::lmer(data = DF, YVAR ~ XFACTOR1 + (1 | XFACTOR2))
 anova(split_plot)
 ```
 
-<!--- G.E.
-Calculez l'intervalle de confiance et déterminez s'il convient de rejeter $H_0$
----->
+<!--% Calculez l'intervalle de confiance et déterminez s'il convient de rejeter $H_0$ ou non en une phrase en dessous. -->
 
-```{r}
+```{r aots_confint}
 confint()
 ```
 
-<!--- Consignes
-Réalisez le test de comparaison multiple et décrivez le résultat.
---->
+<!--% Réalisez le test de comparaison multiple et interprétez le résultat en 3 phrases maximum en dessous. -->
 
-```{r}
+```{r aots_posthoc}
 summary(anovaComp. <- confint(multcomp::glht(split_plot,
   linfct = multcomp::mcp(XFACTOR = "Tukey"))))
 ```
 
-<!--- Consignes
-Vérifiez la répartition des résidus avec un graphique des résidus par rapport aux valeurs ajustées et décrivez le résultat.
---->
+<!--% Vérifiez la répartition des résidus avec un graphique des résidus par rapport aux prédictions du modèle et interprétez le résultat en 2 phases maximum. -->
 
 ```{r}
 split_plot %>.%
@@ -87,21 +74,19 @@ split_plot %>.%
   ggtitle("Residuals vs Fitted")
 ```
 
-<!--- Consignes
-Vérifiez la distribution normale des résidus et décrivez le résultat. --->
+<!--% Vérifiez la distribution Normale des résidus et expliquez ce que vous obtenez. -->
 
 ```{r}
 split_plot %>.%
   broom::augment(.) %>.%
   car::qqPlot(.$.resid, distribution = "norm",
-    envelope = 0.95, col = "Black", xlab = "Quantiles théoriques (distri. normale)",
+    envelope = 0.95, col = "Black",
+    xlab = "Quantiles théoriques (distri. normale)",
     ylab = "Résidus standardisés")
 ```
 
-<!--- Consignes
-Terminez par une conclusion générale sur le projet
---->
 
+# Conclusion
 
-
+<!--% Terminez par une conclusion générale sur le projet -->
 
