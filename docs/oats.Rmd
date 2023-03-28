@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+___
 ```
 
 # Introduction
@@ -17,76 +17,90 @@ Vous êtes chargé d'analyser les résultats d'une expérience organisée en par
 <!--# Le code ci-dessous importe et remanie le tableau de données à utiliser pour vous. -->
 
 ```{r import}
-oats <- read("oats", package = "MASS") %>.%
+read("oats", package = "MASS") %>.%
   filter(., V == "Golden.rain") %>.%
   transmute(., 
     blocks    = B,
     varieties = droplevels(V),
     nitrogen  = as.factor(round(0.1257 + (as.numeric(
       stringr::str_remove_all(as.character(N), "cwt"))), 2)), 
-    yield     = 0.063 * Y) 
+    yield     = 0.063 * Y) %->%
+  oats
 ```
 
-Vous avez donc les variables\ :
+Vous avez donc les variables :
 
-- `blocks`, six parcelles subdivisées en quatre sous-parcelles.
-- `varieties`, la variété d'avoine.
-- `nitrogen`, quantité d'azote ajouté sous forme d'engrais en tonnes par hectare, transformée en variable facteur (quatre niveaux).
-- `yield`, rendement de l'avoine en tonnes par hectare.
+-   `blocks`, six parcelles subdivisées en quatre sous-parcelles.
+-   `varieties`, la variété d'avoine.
+-   `nitrogen`, la quantité d'azote ajouté sous forme d'engrais en tonnes par hectare, transformée en variable facteur (quatre niveaux).
+-   `yield`, rendement de l'avoine en tonnes par hectare.
 
 # Analyse
 
 <!--% Réalisez un premier graphique en nuage de points pour visualiser la variation de rendement en fonction des parcelles et de l'ajout d'azote. Commentez en maximum 2 phrases en dessous (ce graphique est-il le plus adapté ? Pourquoi ?). -->
 
 ```{r oats_plot}
+oats_plot <- chart(___) +
+  ___
 
+oats_plot
+# Ne modifiez pas ci-dessous
+write$rds(oats_plot, here::here("tests", "oats_plot.rds"), compress = "xz")
 ```
 
 <!--% Complétez l'instruction suivante pour créer un modèle split-plot. Déterminez judicieusement XFACTOR1 et XFACTOR2. Interprétez en maximum 2 phrases le résultat obtenu. -->
 
 ```{r aots_anova}
-split_plot <- lmerTest::lmer(data = DF, YVAR ~ XFACTOR1 + (1 | XFACTOR2))
-anova(split_plot)
+oats_split_plot <- lmerTest::lmer(data = DF, YVAR ~ XFACTOR1 + (1 | XFACTOR2))
+anova(oats_split_plot)
+
+# Ne modifiez pas ci-dessous
+write$rds(oats_split_plot, here::here("tests", "oats_split_plot.rds"), compress = "xz")
 ```
 
-<!--% Calculez l'intervalle de confiance et déterminez s'il convient de rejeter $H_0$ ou non en une phrase en dessous. -->
+<!--% Calculez l'intervalle de confiance sur sigma de la variable à effet aléatoire et déterminez s'il convient de rejeter $H_0: sigma = 0$ ou non en une phrase en dessous. -->
 
 ```{r aots_confint}
-confint()
+oats_confint <- confint(___)
+oats_confint
+
+# Ne modifiez pas ci-dessous
+write$rds(oats_confint, here::here("tests", "oats_confint.rds"), compress = "xz")
 ```
 
 <!--% Réalisez le test de comparaison multiple et interprétez le résultat en 3 phrases maximum en dessous. -->
 
 ```{r aots_posthoc}
-summary(anovaComp. <- confint(multcomp::glht(split_plot,
+summary(oats_posthoc <- confint(multcomp::glht(oats_split_plot,
   linfct = multcomp::mcp(XFACTOR = "Tukey"))))
+
+# Ne modifiez pas ci-dessous
+write$rds(oats_posthoc, here::here("tests", "oats_posthoc.rds"), compress = "xz")
 ```
 
 <!--% Vérifiez la répartition des résidus avec un graphique des résidus par rapport aux prédictions du modèle et interprétez le résultat en 2 phases maximum. -->
 
 ```{r}
-split_plot %>.%
+oats_split_plot %>.%
   chart(broom::augment(.), .resid ~ .fitted) +
   geom_point() +
   geom_hline(yintercept = 0) +
   geom_smooth(se = FALSE, method = "loess", formula = y ~ x) +
-  labs(x = "Fitted values", y = "Residuals") +
-  ggtitle("Residuals vs Fitted")
+  labs(x = "Valeurs prédites", y = "Résidus") +
+  ggtitle("Résidus vs prédictions")
 ```
 
 <!--% Vérifiez la distribution Normale des résidus et expliquez ce que vous obtenez. -->
 
 ```{r}
-split_plot %>.%
+oats_split_plot %>.%
   broom::augment(.) %>.%
   car::qqPlot(.$.resid, distribution = "norm",
     envelope = 0.95, col = "Black",
-    xlab = "Quantiles théoriques (distri. normale)",
+    xlab = "Quantiles théoriques",
     ylab = "Résidus standardisés")
 ```
-
 
 # Conclusion
 
 <!--% Terminez par une conclusion générale sur le projet -->
-
