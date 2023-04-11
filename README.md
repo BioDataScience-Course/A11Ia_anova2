@@ -18,7 +18,7 @@ Ce projet est **individuel** et **cadré**. Il doit être terminé pour la fin d
 
 -   Complétez le document `penguins.Rmd` qui se trouve dans le dossier `docs/`. Ce document s'intéresse à la différence de masse entre trois espèces de manchots, également en fonction de leur sexe.
 
--   Complétez le document `oats.Rmd` qui se trouve dans le dossier `docs/`. votre étude concernera le rendement de cultures d'avoine en fonction de différentes conditions.
+-   Complétez le document `oats.Rmd` qui se trouve dans le dossier `docs/`. Votre étude concernera le rendement de cultures d'avoine en fonction de différentes conditions.
 
 ## Notes
 
