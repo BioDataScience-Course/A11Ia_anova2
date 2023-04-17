@@ -30,3 +30,12 @@ README.html
 /docs/**.docx
 /docs/**.tex
 /docs/*_files/
+
+# Mac files
+*DS_Store
+
+# core.***
+*core.****
+
+# Test file
+test/**
