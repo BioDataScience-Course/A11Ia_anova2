@@ -72,9 +72,12 @@ write$rds(peng_lm1, here::here("tests", "peng_lm1.rds"), compress = "xz")
 
 ```
 
-<!--% Le test de comparaison multiple ne peut pas être employé lorsqu'il y a des interactions. Une solution est de créer une nouvelle variable qui groupe les deux variables facteurs en une seule. Faites-le et réalisez une ANOVA à un facteur ensuite. Interprétez ce que vous obtenez en 4 phrases maximum en dessous. -->
+<!--% Le test de comparaison multiple ne peut pas être employé lorsqu'il y a des interactions. Une solution est de créer une nouvelle variable qui groupe les deux variables facteurs en une seule. Nommez cette nouvelle variable `group` et ajoutez à la au tableau `penguins`. Faites-le et réalisez une ANOVA à un facteur ensuite. Interprétez ce que vous obtenez en 4 phrases maximum en dessous. -->
 
 ```{r peng_anova2}
+# Ajout de la nouvelles variable
+
+# Anova à un facteur
 ___(peng_lm2 <- ___)
 
 # Ne modifiez pas ci-dessous
