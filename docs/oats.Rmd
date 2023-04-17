@@ -81,6 +81,7 @@ write$rds(oats_posthoc, here::here("tests", "oats_posthoc.rds"), compress = "xz"
 <!--% Vérifiez la répartition des résidus avec un graphique des résidus par rapport aux prédictions du modèle et interprétez le résultat en 2 phases maximum. -->
 
 ```{r}
+library(___)
 oats_split_plot %>.%
   chart(broom::augment(.), .resid ~ .fitted) +
   geom_point() +
