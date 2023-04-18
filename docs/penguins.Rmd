@@ -63,7 +63,11 @@ write$rds(peng_lm1, here::here("tests", "peng_lm1.rds"), compress = "xz")
 <!--% Vérifiez l'homoscédasticité grâce à un test de Bartlett. Interprétez votre résultats en 2 phrases en dessous. -->
 
 ```{r peng_bartlett1}
+peng_homo1 <- ___
 
+peng_homo1
+# Ne modifiez pas ci-dessous
+write$rds(peng_homo1, here::here("tests", "peng_homo1.rds"), compress = "xz")
 ```
 
 <!--% Vérifiez la distribution Normale des résidus de votre modèle. Interprétez votre analyse en maximum 2 phrases en dessous. -->
