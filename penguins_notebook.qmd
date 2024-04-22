@@ -1,0 +1,241 @@
+---
+title: "Manchots antarctiques"
+author: "___"
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    toc: true
+editor: visual
+lang: fr
+editor_options: 
+  chunk_output_type: inline
+bibliography: bibliography/references.bib
+---
+
+## Introduction et but
+
+Trois espèces de manchots ont été étudiées en Antarctique entre 2007 et 2009 par @gorman2014 de la base scientifique Palmer. Les manchots ont été observés sur l'île du Rêve (`Dream`), sur l'île de Torgersen (`Torgersen`) et sur l'île Biscoe (`Biscoe`). Les espèces étudiées sont le manchot Papou *Pygoscelis papua* (Forster, 1781), `Gentoo`, le manchot Adélie *Pygoscelis adlidae* (Hombron & Jacquinot, 1841), `Adelie` et le manchot à jugulaire *Pygoscelis antarcticus* (Forster, 1781), `Chinstrap`.
+
+![Couple de manchots adélies avec leur petit à droite et manchot à jugulaire (gentoo) à gauche. Photo de J. Auch, license creative commons 2.0 generic.](figures/adelie_and_gentoo.jpg)
+
+Votre but est de mettre en évidence la différence de masse entre les trois espèces de manchots, en tenant compte également du sexe.
+
+## Matériel et méthodes
+
+Les données sont disponibles dans le package R {palmerpenguins}, `penguins`. Voir `?palmerpenguins::penguins` pour plus d'informations.
+
+L'analyse est réalisée avec le logiciel R (`r R.version.string`) et en particulier les packages {inferit} version `r packageVersion("inferit")` et {modelit} version `r packageVersion("modelit")` dans la [SciViews Box 2023](https://www.sciviews.org/software/svbox/). [Saturn Cloud](https://saturncloud.io/) (Linux Ubuntu 22.04) est utilisé pour exécuter le code et compiler la version HTML de ce bloc-notes.
+
+Le seuil $\alpha$ de tous les tests est fixé à l'avance à 5%.
+
+## Résultats
+
+```{r setup, include=FALSE}
+# Ceci est nécessaire pour les tests SDD, ne pas utiliser dans un "vrai" projet
+if (!"tools:tests" %in% search())
+  source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
+
+# Configuration de l'environnement SciViews::R
+SciViews::R("___", "___", lang = "fr")
+```
+
+### Analyse descriptive
+
+Notre jeu de données contient les variables suivantes :
+
+```{r pengimport, record='RODFS', object='penguins'}
+penguins <- read("penguins", package = "palmerpenguins")
+___(___)
+```
+
+```{r pengcomment, output='asis'}
+select_answer(r"-{
+[] -   Ce jeu de données ne contient aucune valeur manquante.
+[] -   Une valeur est manquante dans ce jeu de données.
+[] -   Plusieurs valeurs sont manquantes dans ce jeu de données.
+
+[] -   Ce tableau inclut uniquement des variables numériques.
+[] -   Ce tableau comporte uniquement des variables qualitatives.
+[] -   Ce tableau contient des variables qualitatives et des variables quantitatives.}-")
+```
+
+Nous éliminons les valeurs manquantes pour les variables d'intérêt.
+
+<!--% Retravaillez votre jeu de données `penguins` pour éliminer les données manquantes et stockez le résultat dans `peng`. -->
+
+```{r pengrework, record='RODFS', object='peng'}
+peng <- ___(___)
+```
+
+<!--% Construisez un tableau permettant de comparer la moyenne et la variance des masses, ainsi que le nombre d'observations pour chaque espèce et chaque sexe à partir de `peng`. Formatez-le avec `tabularise()`. -->
+
+```{r pengtab, record='RODFS', object='peng_tab'}
+peng %>.%
+  ___(., ___) %>.%
+  ___(.,
+    moyenne  = ___,
+    variance = ___,
+    n        = ___) ->
+  peng_tab
+  ___(___, auto.labs = FALSE)
+```
+
+```{r pengtabcomment, output='asis'}
+select_answer(r"-{
+[] -   Le plan est balancé.
+[] -   Le plan n'est pas balancé, mais nous avons tout de même un bon nombre d'individus mesurés pour chaque niveau.
+[] -   Le plan n'est pas balancé et cela pose un problème pour une ANOVA.
+
+[] -   Les masses moyennes ne diffèrent pas du tout.
+[] -   Les masses moyennes ne diffèrent pas énormément.
+[] -   Les masses moyennes diffèrent largement.
+  
+[] -   Les variances sont identiques.
+[] -   Les variances semblent suffisamment proches.
+[] -   Les variances diffèrent fortement.}-")
+```
+
+<!--% Réalisez un graphique de `peng` qui mette en évidence la comparaison des masses (y compris la moyenne) entre les trois espèces, également en fonction du  sexe, représenté sous forme de graphiques séparés. Représentez simultanément les boites de dispersion, les points et la moyenne. -->
+
+```{r pengplot, record='RNP', arg='labels'}
+peng %>.%
+  ___(., ___ ~ ___) +
+    ___() +
+    ___(width = 0.1, alpha = 0.3) +
+    ___(geom = "___", fun = "___", color = "red", size = 3)
+```
+
+```{r pengplotcomment, output='asis'}
+select_answer(r"-{
+[] -   Les masses apparaissent très similaires entre les espèces.
+[] -   Des différences de masses moyennes sont nettement visibles entre espèces sur le graphique.
+
+[] -   Les masses moyennes sont similaires entre sexes.
+[] -   Les masses moyennes diffèrent entre sexes.
+  
+[] -   Les variances apparaissent identiques ou similaires.
+[] -   Les variances apparaissent suffisamment proches.
+[] -   Les variances diffèrent fortement.}-")
+```
+
+Le graphique des interactions nous permet d'avoir une première impression visuelle sur la présence ou non d'interactions entre les deux variables facteur espèce et sexe.
+
+<!--% Créez le graphique des interactions à partir de `peng`. Vous avez deux possibilités : représenter les espèces en axe X et le sexe avec de la couleur ou l'inverse. Testez les deux et retenez le graphique qui s'avère le plus clair ici. -->
+
+```{r penginteraction, record='RNP', arg='labels'}
+peng %>.%
+  ___(., ___) %>.%
+  ___(., moyenne = ___) %>.%
+  ___(data = ., ___) +
+  ___() +
+  ___()
+```
+
+```{r penginteractioncomment, output='asis'}
+select_answer(r"-{
+[] -   Les segments de droites étant parallèles ou pratiquement, il n'y a pas d'interactions entre espèce et sexe. Un modèle ANOVA à deux facteurs sans interactions est le plus indiqué, mais nous vérifions quand même d'abord avec un modèle croisé complet.
+[] -   Les segments de droites ne sont pas complètement parallèles. La situation n'est pas franche ici du point de vue des interactions. Un modèle ANOVA croisé complet nous en dira plus, quitte à simplifier vers un modèle sans interactions si elles ne sont pas significatives comme nous le supposons à ce stade.
+[] -   Les segments de droites ne sont pas parallèles, mais la situation n'est pas catastrophique. Des interactions semblent exister, mais sans certitudes. Nous devons les étudier de plus près avec un modèle ANOVA croisé complet, quitte à simplifier vers un modèle sans interactions si elles ne s'avèrent pas significatives.
+[] -   Les segments de droites ne sont pas du tout parallèles. Un modèle ANOVA croisé complet est indispensable dans notre cas.}-")
+```
+
+
+### ANOVA
+
+Nous comparons les masses moyennes des trois espèces et des sexes à l'aide d'une ANOVA à deux facteurs.
+
+<!--% Effectuez une ANOVA à deux facteurs. Déterminez si vous devez employer un modèle complet ou un modèle sans interactions selon celui qui est le plus indiqué ici. -->
+
+```{r penganova1, record='ROP', object='peng_lm', arg='terms'}
+___(peng_lm <- ___(data = ___, ___ ~ ___)) %>.%
+  tabularise(.)
+```
+
+```{r penganova1comment, output='asis'}
+select_answer(r"-{
+[] -   Il n'y a pas d'interactions significatives entre espèce et sexe au seuil $\alpha$ de 5%.
+[] -   Les interactions entre espèce et sexe sont significatives au seuil $\alpha$ de 5%.
+
+[] -   Les masses moyennes ne diffèrent pas de manière significative entre espèces au seuil $\alpha$ de 5%.
+[] -   Les masses moyennes diffèrent de manière significative entre espèces au seuil $\alpha$ de 5%.
+  
+[] -   Les masses moyennes ne diffèrent pas de manière significative entre sexes au seuil $\alpha$ de 5%.
+[] -   Les masses moyennes diffèrent de manière significative entre sexes au seuil $\alpha$ de 5%.
+  
+[] -   Les interprétations en fonction de l'espèce ou du sexe doivent se faire avec précaution, étant donné la présence d'interactions entre les deux.}-")
+```
+
+Nous vérifions les conditions d'application de notre modèle ANOVA à deux facteurs à l'aide d'un test de Bartlett (homoscédasticité) et d'un graphique quantile-quantile des résidus.
+
+<!--% Vérifiez l'homoscédasticité grâce à un test de Bartlett adéquat. -->
+
+```{r pengbartlett1, record='RNP', arg='method,data.name,p.value'}
+___(data = ___, ___ ~ interaction(___, ___))
+```
+
+<!--% Vérifiez la distribution normale des résidus de votre modèle à l'aide du graphique adéquat. -->
+
+```{r pengresid1, record='RNP', arg='labels'}
+chart$___(___)
+```
+
+```{r pengresidcomment, output='asis'}
+select_answer(r"-{
+[] -   Les résidus ont une distribution normale et ont une variance qui n'est pas siginficativement différente au seuil $\alpha$ de 5% (homoscédasticité). Les conditions d'application de l'ANOVA sont rencontrées.
+[] -   Les résidus ont une distribution normale, mais il n'y a pas homoscédasticité.
+[] -   Les résidus ont une variance similaire (homoscédasticité) mais n'ont pas une distribution normale.
+[] -   Les résidus n'ont ni distribution normale, ni variances égales (hétéroscédasticité).}-")
+```
+
+
+### Tests post-hoc
+
+Étant donné la présence d'interactions, nous ne pouvons pas facilement déterminer les espèces qui diffèrent du point de vue de leur masse moyenne à l'aide de comparaisons multiples (test post-hoc). Cependant, si nous calculons une nouvelle variable combinant les deux variables facteurs, nous pouvons réaliser une ANOVA à un facteur et effectuer ces comparaisons multiples de manière plus détaillée.
+
+<!--% Combinez `species` et `sex` en une seule variable facteur `species_sex` grâce à la fonction `interaction()`. Placez cette nouvelle variable dans le tableau `peng`. Ensuite calculez une nouvelle ANOVA, à un facteur avec `species_sex` dans `peng_lm2` et produisez le tableau de l'ANOVA formaté avec `tabularise()`. -->
+
+```{r penganova2, record='ROP', object='peng_lm2', arg='terms'}
+# Ajout de la nouvelle variable combinant species et sex
+peng <- ___(peng, species_sex = interaction(___, ___))
+# Anova à un facteur
+___(peng_lm2 <- ___(data = peng, ___ ~ ___)) %>.%
+  tabularise(.)
+```
+
+```{r penganova2comment, output='asis'}
+select_answer(r"-{
+[] -   Les masses moyennes ne diffèrent pas de manière significative en fonction de `species_sex` au seuil $\alpha$ de 5%.
+[] -   Les masses moyennes diffèrent de manière significative en fonction de `species_sex` au seuil $\alpha$ de 5%.}-")
+```
+
+Les comparaisons multiples sont réalisées maintenant sur base de la variable combinée `species_sex` :
+
+<!--% Réalisez un test de comparaison multiple sur base de votre variable combinée `species_sex` dans ce second modèle `peng_lm2`. Tracez-en ensuite le graphique. -->
+
+```{r pengposthoc2, record='ROP', object='peng_posthoc2', arg='linfct'}
+summary(peng_posthoc2 <- confint(multcomp::glht(___,
+  linfct = multcomp::mcp(___ = "Tukey"))))
+oma <- par(oma = c(0, 9.1, 0, 0))
+plot(peng_posthoc2)
+```
+
+
+```{r pengposthoc2comment, output='asis'}
+select_answer(r"-{
+[] -   Les masses moyennes ne diffèrent pas de manière significative entre toutes les conditions.
+[] -   Les masses moyennes diffèrent de manière significative entre Gentoo et les deux autres espèces, mais pas entre Adelie et Chinstrap, autant pour les mâles que pour les femelles.
+[] -   Les masses moyennes diffèrent de manière significative entre Gentoo et les deux autres espèces, mais pas entre Adelie et Chinstrap, seulement pour les mâles.
+[] -   Les masses moyennes diffèrent de manière significative entre Gentoo et les deux autres espèces, mais pas entre Adelie et Chinstrap, seulement pour les femelles.}-")
+```
+
+## Discussion et conclusions
+
+<!--% Concluez votre travail en trois phrases maximum. -->
+
+...Votre discussion ici...
+
+## Références
+
+<!--% Ne rien indiquer ici. La référence bibliographique se placera automatiquement ici. -->

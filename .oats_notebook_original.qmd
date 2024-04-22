@@ -1,0 +1,243 @@
+---
+title: "Rendement de cultures d'avoine"
+author: '___'
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    toc: true
+editor: visual
+lang: fr
+editor_options: 
+  chunk_output_type: inline
+bibliography: bibliography/references.bib
+---
+
+## Introduction et but
+
+Le rendement de différentes variétés d'avoine est quantifié en fonction de l'apport en azote. Un protocole expérimental en parcelles divisées (*split-plot*) a été mis en place pour l'étudier afin de minimiser l'effet de l'orientation des parcelles et de leur sol (certaines parcelles étant probablement plus fertiles et/ou mieux exposées que d'autres).
+
+L'objectif est de déterminer si l'ajout d'azote a un effet significatif sur le rendement de l'avoine, et ce, uniquement pour la variété "Golden rain".
+
+## Matériel et méthodes
+
+Les données proviennent de @yates1935. Ce tableau contient les variables :
+
+-   `B` qui est renommé en `block`, six parcelles subdivisées en quatre sous-parcelles,
+-   `V` renommé en `variety`, la variété d'avoine dont on ne garde que `"Golben.rain"`,
+-   `N` renommé en  `nitrogen`, la quantité d'azote ajouté sous forme d'engrais en cwt/acre qui est convertie en tonnes par hectare et transformée en variable facteur (quatre niveaux).
+-   `Y` renommé en `yield`, rendement de l'avoine en 1/4 livres/acre qui est converti en tonnes par hectare.
+
+L'analyse est réalisée avec le logiciel R (`r R.version.string`) et en particulier les packages {inferit} version `r packageVersion("inferit")` et {modelit} version `r packageVersion("modelit")` dans la [SciViews Box 2023](https://www.sciviews.org/software/svbox/). [Saturn Cloud](https://saturncloud.io/) (Linux Ubuntu 22.04) est utilisé pour exécuter le code et compiler la version HTML de ce bloc-notes.
+
+Le seuil $\alpha$ de tous les tests est fixé à l'avance à 5%.
+
+## Résultats
+
+```{r setup, include=FALSE}
+# Ceci est nécessaire pour les tests SDD, ne pas utiliser dans un "vrai" projet
+if (!"tools:tests" %in% search())
+  source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
+
+# Configuration de l'environnement SciViews::R
+SciViews::R("___", "___", lang = "fr")
+```
+
+### Étude descriptive
+
+Voici un résumé des données ainsi qu'une représentation graphique après conversion et transformation telles que décrites dans le matériel et méthodes :
+
+<!--# Le code ci-dessous importe et remanie le tableau de données à utiliser pour vous (il est rempli pour vous et vous ne devez pas l'éditer). -->
+
+```{r oatsimport, record='RODFS', object='oats'}
+read("oats", package = "MASS") %>.%
+  sfilter(., V == "Golden.rain") %>.%
+  smutate(., 
+    block    = B,
+    variety  = droplevels(V),
+    nitrogen = as.ordered(round(0.1257 + (as.numeric(
+      stringr::str_remove_all(as.character(N), "cwt"))), 2)), 
+    yield    = 0.063 * Y) %>.%
+  sselect(., -B, -V, -N, -Y) %>.%
+  labelise(., label = list(
+      block    = "Parcelle",
+      variety  = "Variété",
+      nitrogen = "Azote",
+      yield    = "Rendement"
+    ), units = list(
+      nitrogen = "t/ha",
+      yield    = "t/ha"
+    )
+  ) ->
+  oats
+skimr::skim(oats)
+```
+
+```{r oatscomment, output='asis'}
+select_answer(r"-{
+[] -   Ce jeu de données ne contient aucune valeur manquante.
+[] -   Une valeur est manquante dans ce jeu de données.
+[] -   Plusieurs valeurs sont manquantes dans ce jeu de données.
+
+[] -   Ce tableau inclut uniquement des variables numériques.
+[] -   Ce tableau comporte uniquement des variables qualitatives.
+[] -   Ce tableau contient des variables qualitatives et une variable quantitative.
+[] -   Ce tableau contient des variables qualitatives et une variable quantitative, ainsi qu'une donnée de type chaîne de caractères.
+  
+[] -   La variable `nitrogen` est numérique.
+[] -   La variable `nitrogen` est de type factor.
+[] -   La variable `nitrogen` est de type ordered (facteur ordonné).}-")
+```
+
+<!--% Réalisez un graphique en nuage de points du rendement en fonction de la dose d'engrais azoté tout en représentant les différents blocs en sous-graphiques séparés. -->
+
+```{r oatsplot, record='RNP', arg='labels'}
+___(data = ___, ___ ~ ___) +
+  ___()
+```
+
+```{r oatsplotcomment, output='asis'}
+select_answer(r"-{
+[] -   L'effet des six parcelles est strictement le même.
+[] -   L'effet des six parcelles est à peu près le même.
+[] -   L'effet des six parcelles diffère de manière non négligeable.
+
+[] -   Le rendement ne semble pas dépendre du de la dose d'engrais.
+[] -   Le rendement semble augmenter avec la dose d'engrais.
+[] -   Le rendement semble diminuer avec la dose d'engrais.}-")
+```
+
+
+### ANOVA
+
+Nous ajustons une ANOVA à deux facteurs de type split-plot en considérant un décalage de rendement dû à la parcelle (effet aléatoire).
+
+<!--% Complétez l'instruction suivante pour calculer votre ANOVA à deux facteurs selon un modèle split-plot. Déterminez judicieusement XFACTOR1 et XFACTOR2 ainsi que facteurs fixes ou aléatoires. Affichez ensuite le tableau de l'ANOVA formaté avec `tabularise()` pour le facteur fixe. -->
+
+```{r oatsanova, record='ROMD5', object='oats_lmer'}
+oats_lmer <- ___(data = ___, ___ ~ ___)
+___(oats_lmer) %>.%
+  tabularise(.)
+```
+
+```{r oatsanovacomment, output='asis'}
+select_answer(r"-{
+[] -   Nous rejetons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne rejetons pas H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne pouvons pas conclure sur base de ces résultats.
+  
+[] -   Une dose d'engrais azoté croissante donne un rendement significativement meilleur en avoine au seuil $\alpha$ de 5%.
+[] -   Une dose d'engrais azoté décroissante donne un rendement significativement meilleur en avoine au seuil $\alpha$ de 5%.
+[] -   Une dose d'engrais azoté croissante ne donne pas un rendement significativement meilleur en avoine au seuil $\alpha$ de 5%.
+[] -   Une dose d'engrais azoté décroissante ne donne pas un rendement significativement meilleur en avoine au seuil $\alpha$ de 5%.
+[] -   Nous ne pouvons pas affirmer que des doses variables d'engrais azoté ont un effet sur le rendement en avoine, car nous n'avons pas assez de données à disposition.}-")
+```
+
+Voici les intervalles de confiance à 95% sur les paramètres du modèle :
+
+<!--% Calculez les intervalles de confiance à 95% du modèle. -->
+
+```{r oatsconfint, record='RNMD5'}
+___(oats_lmer)
+```
+
+```{r oatsconfintcomment, output='asis'}
+select_answer(r"-{
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `.sig01`.
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `.sigma`.
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `(Intercept)`.
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `nitrogen.L`.
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `nitrogen.Q`.
+[] -   L'intervalle de confiance à 95% qui nous intéresse ici pour déterminer si un effet parcelle existe est `nitrogen.C`.
+
+[] -   L'effet parcelle est significatif au seuil $\alpha$ de 5%. Son écart type est différent de zéro.
+[] -   L'effet parcelle n'est pas significatif au seuil $\alpha$ de 5%. Son écart type n"est pas différent de zéro.
+  
+[] -   Les intervalles de confiance à 95% pour l'azote nous indiquent que l'effet est linéaire.
+[] -   Les intervalles de confiance à 95% pour l'azote nous indiquent que l'effet est quadratique.
+[] -   Les intervalles de confiance à 95% pour l'azote nous indiquent que l'effet est conique.
+[] -   Les intervalles de confiance à 95% pour l'azote nous indiquent que l'effet est complexe (constitué de plusieurs effets).
+[] -   Les intervalles de confiance à 95% pour l'azote nous indiquent que l'effet est négligeable.}-")
+```
+
+
+## Tests post-hoc
+
+Un test de comparaison multiple est réalisé pour déterminer les différences significatives entre les doses d'azote.
+
+<!--% Réalisez le test de comparaison multiple relatif à ce modèle, ainsi que son graphique. -->
+
+```{r oatsposthoc, record='ROP', object='oats_posthoc', arg='linfct'}
+summary(oats_posthoc <- confint(multcomp::glht(___,
+  linfct = multcomp::mcp(___ = "Tukey"))))
+oma <- par(oma = c(0, 5.1, 0, 0))
+plot(oats_posthoc)
+```
+
+```{r oatsposthoccomment, output='asis'}
+select_answer(r"-{
+[] -   Nous n'observons pas d'effet de la concentration en azote sur le rendement.
+[] -   La concentration en azote de 0.73 t/ha donne des rendements significativement meilleurs que 0.13 t/ha.
+[] -   La concentration en azote de 0.73 t/ha donne des rendements significativement meilleurs que 0.33 t/ha.
+[] -   La concentration en azote de 0.73 t/ha donne des rendements significativement meilleurs que 0.53 t/ha.
+[] -   La concentration en azote de 0.53 t/ha donne des rendements significativement meilleurs que 0.13 t/ha.
+[] -   La concentration en azote de 0.53 t/ha donne des rendements significativement meilleurs que 0.33 t/ha.
+[] -   La concentration en azote de 0.33 t/ha donne des rendements significativement meilleurs que 0.13 t/ha.}-")
+```
+
+
+### Analyse des résidus du modèle
+
+Les conditions d'application de l'ANOVA sont vérifiées par analyse des résidus ci-dessous.
+
+<!--% Vérifiez la distribution normale des résidus du modèle. -->
+
+```{r oatsqqplot, record='RNMD5'}
+library(broom.mixed)
+oats_lmer %>.%
+  ___(.) %>.%
+  ___(.$.resid, distribution = "___",
+    envelope = 0.95, col = "Black",
+    xlab = "Quantiles théoriques",
+    ylab = "Résidus standardisés")
+```
+
+```{r oatsqqplotcomment, output='asis'}
+select_answer(r"-{
+[] -   Le graphique quantile-quantile indique une distribution normale ou quasi-normale des résidus du modèle.
+[] -   Le graphique quantile-quantile indique que la distribution des résidus n'est pas normale. Néanmoins, les écarts sont faibles et nous pouvons conserver notre modèle comme approximativement bon à condition que les valeurs P s'éloignent fortement du seuil $\alpha$.
+[] -   Le graphique quantile-quantile indique que la distribution des résidus n'est pas normale. Notre modèle n"est pas utilisable.}-")
+```
+
+<!--% Vérifiez la répartition générale des résidus avec un graphique des résidus du modèle. -->
+
+```{r oatsresid, record='RNP', arg='labels'}
+oats_lmer %>.%
+  ___(___(.), .resid ~ .fitted) +
+  ___() +
+  ___(yintercept = 0) +
+  ___(se = FALSE, method = "loess", formula = y ~ x) +
+  labs(x = "Valeurs prédites", y = "Résidus") +
+  ggtitle("Résidus vs prédictions")
+```
+
+```{r oatsresidcomment, output='asis'}
+select_answer(r"-{
+[] -   Les résidus ont une distribution parfaite en fonction des valeurs prédites.
+[] -   La distribution des résidus n'est pas optimale, mais elle ne montre pas non plus de tendance particulièrement problématique. Notre modèle reste valable.
+[] -   La distribution des résidus est très mauvaise. Notre modèle n'est pas utilisable.}-")
+```
+
+
+## Discussion et conclusions
+
+<!--% Concluez votre travail en trois phrases maximum. Que pensez-vous de ce modèle ? -->
+
+...Votre discussion ici...
+
+<!--# Notez que nous aurions également pu traiter `nitrogen` comme une variable numérique et effectuer une régression linéaire... nous étudierons cela l'an prochain. Il est aussi possible de réaliser un modèle plus complexe à 3 facteurs en étudiant aussi la variété d'avoine (toutes les données initiales, relatives à 3 variétés différentes). La formule de notre modèle s'écrit alors yield ~ nitrogen * variety + (variety | block) avec un effet bloc qui dépend aussi de la variété. Des simplifications sont envisageables s'il n'y a pas d'interactions => yield ~ nitrogen + variety + (variety | block), ou si l'effet de la variété ne dépend pas de la parcelle auquel cas on reviendrait à (1 | block) pour le terme aléatoire. -->
+
+## Références
+
+<!--% Ne rien indiquer ici. La référence bibliographique se placera automatiquement ici. -->
