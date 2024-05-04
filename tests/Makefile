@@ -15,7 +15,7 @@ original :
 	rm -f ../penguins_notebook.html
 	rm -rf ../penguins_notebook_files
 	rm -f ../oats_notebook.html
-	rm -rf ..oats_notebook_files
+	rm -rf ../oats_notebook_files
 	echo "  • Effacement des objets créés pour les tests..."
 	rm -rf results
 	rm -f .cnt
@@ -33,7 +33,7 @@ solution :
 	rm -f ../penguins_notebook.html
 	rm -rf ../penguins_notebook_files
 	rm -f ../oats_notebook.html
-	rm -rf ..oats_notebook_files
+	rm -rf ../oats_notebook_files
 	echo "  • Effacement des objets créés pour les tests..."
 	rm -rf results
 	rm -f .cnt
@@ -51,7 +51,7 @@ prepare :
 	rm -f ../penguins_notebook.html
 	rm -rf ../penguins_notebook_files
 	rm -f ../oats_notebook.html
-	rm -rf ..oats_notebook_files
+	rm -rf ../oats_notebook_files
 	echo "  • Effacement des objets créés pour les tests..."
 	rm -rf results
 	rm -f .cnt
